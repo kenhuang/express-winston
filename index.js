@@ -289,6 +289,12 @@ exports.logger = function logger(options) {
     });
 
     return function (req, res, next) {
+        // by pass logic when log level is greater than winston instance log level
+        if(options.winstonInstance && options.level &&
+            options.winstonInstance.levels[options.level] > options.winstonInstance.levels[options.winstonInstance.level]) {
+                return next();
+            }
+        }
         var coloredRes = {};
 
         var currentUrl = req.originalUrl || req.url;
